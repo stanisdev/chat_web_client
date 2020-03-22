@@ -2,9 +2,9 @@
 
 const server = 'http://localhost:3000';
 
-function ajax({ data, method, url }) {
+function ajax({ data, method, url, token }) {
   return new Promise((resolve, reject) => {
-    $.ajax({
+    const params = {
       url: server + url,
       async: true,
       data,
@@ -18,12 +18,17 @@ function ajax({ data, method, url }) {
         resolve(res);
       },
       error({ status, responseJSON: response }) {
+        console.error(response);
         if (status === 400 && response instanceof Object) {
           return reject({ ...response.errors });
         }
         reject({});
       }
-    });
+    };
+    if (typeof token === 'string') {
+      params.headers = { authorization: 'Bearer ' + token };
+    }
+    $.ajax(params);
   });
 }
 
