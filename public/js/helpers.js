@@ -1,6 +1,6 @@
 'use string'
 
-const server = 'http://localhost:3000';
+const server = 'http://localhost:3001';
 
 function ajax({ data, method, url, token }) {
   return new Promise((resolve, reject) => {
