@@ -8,6 +8,7 @@ class Chats {
       token
     };
     const { chats } = await ajax(params);
+    let html = '<table class="table table-hover mt125" id="chats">';
     
     for (let a = 0; a < chats.length; a++) {
       const chat = chats[a];
@@ -18,14 +19,15 @@ class Chats {
       }
       createdAt = Number.isInteger(createdAt) ? new Date(createdAt) : '';
   
-      const html = `<tr>
+      html += `<tr>
         <th scope="row">
           <a class="cBlack chat" data-id="${id}" href="#/messages/${id}">${name}</a>
         </th>
         <td>${content}</td>
         <td>${createdAt}</td>
       </tr>`;
-      $('#chats').append(html);
     }
+    html += '</table>';
+    container.html(html);
   }
 }

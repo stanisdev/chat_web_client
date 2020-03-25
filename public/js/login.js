@@ -11,8 +11,11 @@ $('button[type="submit"]').on('click', async () => {
   };
 
   try {
-    const { token } = await ajax(params);
+    const { token, user } = await ajax(params);
     localStorage.setItem('token', token);
+    localStorage.setItem('user.id', user.id);
+    localStorage.setItem('user.name', user.name);
+    window.location = '/chats';
   } catch (errors) {
     return mapErrors(errors);
   }

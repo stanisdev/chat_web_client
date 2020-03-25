@@ -2,10 +2,26 @@
   margin-top: 100px;
 }
 
+.mt125 {
+  margin-top: 125px;
+}
+
 .cPointer {
   cursor: pointer;
 }
 
 .cBlack, .cBlack:hover {
   color: black;
+}
+
+#messages tr th {
+  padding: 11px 32px 11px 11px;
+}
+
+#newMessage {
+  width: 50%;
+}
+
+.ml80pr {
+  margin-left: 80%;
 }
