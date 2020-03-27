@@ -1,11 +1,11 @@
 'use string'
 
-const server = 'http://localhost:3001';
+const helpers = {};
 
-function ajax({ data, method, url, token }) {
+helpers.ajax = ({ data, method, url, token }) => {
   return new Promise((resolve, reject) => {
     const params = {
-      url: server + url,
+      url: global.config.serverUrl + url,
       async: true,
       data,
       method,
@@ -25,13 +25,13 @@ function ajax({ data, method, url, token }) {
         reject({});
       }
     };
-    if (typeof token === 'string') {
-      params.headers = { authorization: 'Bearer ' + token };
+    if (token === true) {
+      params.headers = { authorization: 'Bearer ' + global.token };
     }
     $.ajax(params);
   });
 }
 
-function mapErrors(errors) {
+helpers.mapErrors = (errors) => {
   alert(JSON.stringify(errors)); // @todo: replace by another construction
 }

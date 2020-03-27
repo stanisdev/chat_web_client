@@ -5,9 +5,9 @@ class Chats {
     const params = {
       method: 'GET',
       url: '/chat',
-      token
+      token: true
     };
-    const { chats } = await ajax(params);
+    const { chats } = await helpers.ajax(params);
     let html = '<table class="table table-hover mt125" id="chats">';
     
     for (let a = 0; a < chats.length; a++) {
@@ -28,6 +28,16 @@ class Chats {
       </tr>`;
     }
     html += '</table>';
-    container.html(html);
+    global.elements.container.html(html);
+  }
+
+  /**
+   * Select a chat
+   */
+  selectAction() {
+    $('body').on('click', 'a.chat', (elem) => {
+      global.selectedChat.id = $(elem.target).attr('data-id');
+      global.services.messages.load();
+    });
   }
 }

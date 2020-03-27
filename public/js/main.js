@@ -1,40 +1,50 @@
 'use string'
 
-const token = localStorage.getItem('token');
-const container = $('#container');
-const chats = new Chats();
-const messages = new Messages();
-let [, entity] = window.location.href.split('/chats');
-
-function navigatation(entity) {
-  if (entity.includes('/messages')) {
-    const chatId = entity.slice(entity.lastIndexOf('/') + 1);
-    messages.load(chatId);
+class Global {
+  constructor() {
+    this.token = localStorage.getItem('token');
+    this.elements = {
+      container: $('#container')
+    };
+    this.config = {
+      serverUrl: 'http://localhost:3001',
+      webSocketUrl: `ws://localhost:8080?token=${this.token}`
+    };
+    this.services = {
+      chats: new Chats(),
+      messages: new Messages()
+    };
+    this.selectedChat = {
+      id: null
+    };
+    this.user = {
+      id: localStorage.getItem('user.id'),
+      name: localStorage.getItem('user.name')
+    };
   }
-  else {
-    chats.load();
+
+  navigation(urlEntity) {
+    if (urlEntity.includes('/messages')) {
+      this.selectedChat.id = urlEntity.slice(urlEntity.lastIndexOf('/') + 1);
+      this.services.messages.load();
+    } else {
+      this.services.chats.load();
+    }
+  }
+
+  navigationAction() {
+    $('a.navigatation').on('click', (elem) => {
+      global.selectedChat.id = null;
+      this.navigation($(elem.target).attr('data-entity'));
+    });
+  }
+
+  logoutAction() {
+    $('#logout').on('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user.id');
+      localStorage.removeItem('user.name');
+      window.location = '/auth/login';
+    });
   }
 }
-
-/**
- * Select a chat
- */
-$('body').on('click', 'a.chat', (elem) => {
-  const chatId = $(elem.target).attr('data-id');
-  messages.load(chatId);
-});
-
-/**
- * Logout action
- */
-$('#logout').on('click', () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user.id');
-  localStorage.removeItem('user.name');
-  window.location = '/auth/login';
-});
-
-$('a.navigatation').on('click', (elem) => {
-  navigatation($(elem.target).attr('data-entity'));
-});
-navigatation(entity);

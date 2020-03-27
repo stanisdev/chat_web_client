@@ -1,5 +1,11 @@
 'use string'
 
+const global = { // @todo: fix this
+  config: {
+    serverUrl: 'http://localhost:3001'
+  }
+};
+
 $('button[type="submit"]').on('click', async () => {
   const password = $('#password').val();
   const email = $('#email').val();
@@ -11,12 +17,13 @@ $('button[type="submit"]').on('click', async () => {
   };
 
   try {
-    const { token, user } = await ajax(params);
+    const { token, user } = await helpers.ajax(params);
     localStorage.setItem('token', token);
     localStorage.setItem('user.id', user.id);
     localStorage.setItem('user.name', user.name);
     window.location = '/chats';
   } catch (errors) {
-    return mapErrors(errors);
+    console.error(errors);
+    return helpers.mapErrors(errors);
   }
 });
